@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail de Sécurité - Web Audit Lab</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .labs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .lab-card {
+            background-color: #1e293b;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #334155;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .lab-card:hover {
+            transform: translateY(-5px);
+            border-color: #38bdf8;
+        }
+        .lab-card h2 {
+            margin-top: 0;
+            color: #f43f5e;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        .lab-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+        .btn-lab {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            width: 80%;
+        }
+        .btn-lab:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-exam {
+            background-color: #2563eb;
+        }
+        .btn-sql {
+            background-color: #10b981;
+        }
+        .btn-sql:hover {
+            background-color: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Portail d'Audit et Sécurité Web</h1>
+        <p class="subtitle">Sélectionnez le laboratoire de test que vous souhaitez explorer :</p>
+
+        <div class="labs-grid">
+            <div class="lab-card">
+                <h2>1. Lab Examen</h2>
+                <p>Analyse de la sécurité de la servlet d'accueil. Ce laboratoire contient les vulnérabilités de l'énoncé de l'examen (SQL Injection, Reflected XSS, et Local File Inclusion).</p>
+                <a href="vulnerable?id=1&name=Guest&page=home" class="btn-lab btn-exam">Go to Exam Lab</a>
+            </div>
+
+            <div class="lab-card">
+                <h2>2. Lab SQL Injection & CRUD</h2>
+                <p>Tableau de bord de gestion des produits nécessitant une authentification. Ce laboratoire permet de pratiquer le contournement d'authentification SQLi et l'injection dans les barres de recherche.</p>
+                <a href="products" class="btn-lab btn-sql">Go to SQL Lab</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
