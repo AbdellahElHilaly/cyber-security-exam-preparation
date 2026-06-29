@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دمج تحليلات الأمان (SAST, SCA, DAST) في CI/CD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tajawal:wght@300;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #38bdf8;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        .intro-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .intro-card h2 {
+            color: #f43f5e;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        .card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            transition: transform 0.2s, border-color 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        .card.sast { border-right: 6px solid #38bdf8; }
+        .card.sca { border-right: 6px solid #10b981; }
+        .card.dast { border-right: 6px solid #f43f5e; }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+        .card-title {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        .sast .card-title { color: #38bdf8; }
+        .sca .card-title { color: #10b981; }
+        .dast .card-title { color: #f43f5e; }
+        
+        .badge {
+            background-color: #334155;
+            color: #94a3b8;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .meta-list {
+            margin: 15px 0;
+            padding-right: 20px;
+        }
+        .meta-list li {
+            margin-bottom: 10px;
+        }
+        .meta-list strong {
+            color: #f8fafc;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin-top: 40px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+        th, td {
+            padding: 16px;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            background-color: #1e293b;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+        tr:hover {
+            background-color: #1e293b55;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>دمج تحليلات الأمان في خط أنابيب CI/CD</h1>
+        <p class="subtitle">دليل ممارسات DevSecOps لتحقيق أقصى فاعلية في الكشف المبكر وتقليل وقت النشر</p>
+
+        <div class="intro-card">
+            <h2>مفهوم Shift-Left Security</h2>
+            <p>يتمحور مفهوم أمان التطبيقات الحديثة حول نقل عمليات الفحص واختبارات الحماية إلى أبكر مرحلة ممكنة في دورة حياة البرمجيات. الفحص المبكر يسهل على المهندسين معالجة الثغرات بنصف التكلفة والجهد مقارنة باكتشافها في بيئة الإنتاج الفعلية.</p>
+        </div>
+
+        <div class="card sast">
+            <div class="card-header">
+                <h3 class="card-title">1. تحليل SAST (الفحص الساكن)</h3>
+                <span class="badge">Static Application Security Testing</span>
+            </div>
+            <ul class="meta-list">
+                <li><strong>مرحلة الدمج:</strong> البناء والتجميع (Build / Commit Stage) أو كمشغل تلقائي لطلبات الدمج (Pull Request).</li>
+                <li><strong>آلية العمل:</strong> فحص الكود المصدري مباشرة دون تشغيل التطبيق للبحث عن الهياكل البرمجية غير الآمنة (مثل كلمات المرور الصلبة، وجمل الاستعلام غير المعقمة).</li>
+                <li><strong>الهدف الرئيسي:</strong> توفير تغذية راجعة فورية للمطور قبل دمج الكود البرمجي في الفرع الرئيسي.</li>
+                <li><strong>تقليل وقت النشر:</strong> يُفضل تشغيل فحص SAST جزئي (Incremental Scan) أثناء طلبات الدمج للتحقق من الملفات الجديدة فقط، مع إمكانية جدولة الفحص الكامل في غير أوقات العمل الرسمية (مثل الفحص الليلي).</li>
+            </ul>
+        </div>
+
+        <div class="card sca">
+            <div class="card-header">
+                <h3 class="card-title">2. تحليل SCA (فحص المكتبات الخارجية)</h3>
+                <span class="badge">Software Composition Analysis</span>
+            </div>
+            <ul class="meta-list">
+                <li><strong>مرحلة الدمج:</strong> إدارة وحل الحزم والتبعيات (Package / Dependency Stage).</li>
+                <li><strong>آلية العمل:</strong> قراءة ملفات إدارة التبعيات (مثل pom.xml في Maven) ومقارنتها بقواعد بيانات الثغرات المعروفة (CVE) للتأكد من خلو المشروع من مكتبات خارجية مخترقة.</li>
+                <li><strong>الهدف الرئيسي:</strong> منع بناء التطبيق بوجود ثغرات معروفة في المكونات مفتوحة المصدر.</li>
+                <li><strong>تقليل وقت النشر:</strong> يُعتبر هذا التحليل سريعًا جدًا ولا يسبب أي تأخير يذكر على وقت النشر الرئيسي.</li>
+            </ul>
+        </div>
+
+        <div class="card dast">
+            <div class="card-header">
+                <h3 class="card-title">3. تحليل DAST (الفحص الديناميكي)</h3>
+                <span class="badge">Dynamic Application Security Testing</span>
+            </div>
+            <ul class="meta-list">
+                <li><strong>مرحلة الدمج:</strong> ما بعد النشر في بيئة الاختبار (Post-Deployment / Staging Stage).</li>
+                <li><strong>آلية العمل:</strong> اختبار التطبيق الفعلي أثناء عمله (Running Application) ومحاكاة هجمات الاختراق الخارجية (مثل هجمات SQLi و XSS) لمعرفة استجابة نقاط النهاية.</li>
+                <li><strong>الهدف الرئيسي:</strong> التحقق من إعدادات البيئة الخارجية واستجابة الخادم أثناء التشغيل الفعلي.</li>
+                <li><strong>تقليل وقت النشر:</strong> نظراً لأن DAST يستغرق وقتًا طويلاً، يجب تشغيله بشكل غير متزامن (Asynchronous) في بيئة الـ Staging بحيث لا يعطل فحص الأمان خط النشر المباشر.</li>
+            </ul>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>الأداة</th>
+                        <th>مرحلة خط النشر (Pipeline)</th>
+                        <th>سرعة الفحص</th>
+                        <th>التأثير على وقت النشر</th>
+                        <th>المستوى المستهدف</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: #38bdf8; font-weight: bold;">SAST</td>
+                        <td>Commit / Build</td>
+                        <td>سريع (دقائق)</td>
+                        <td>منخفض (عند الفحص الجزئي)</td>
+                        <td>الكود البرمجي المكتوب</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #10b981; font-weight: bold;">SCA</td>
+                        <td>Resolve Dependencies</td>
+                        <td>سريع جداً (ثوانٍ)</td>
+                        <td>شبه معدوم</td>
+                        <td>المكتبات الخارجية المرفقة</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #f43f5e; font-weight: bold;">DAST</td>
+                        <td>Staging (Post-Deploy)</td>
+                        <td>بطيء (ساعات)</td>
+                        <td>معدوم (إذا كان غير متزامن)</td>
+                        <td>التطبيق الفعلي والخادم</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p>تم إعداد هذا الدليل لمتطلبات مادة التدقيق الأمني على تطبيقات الويب</p>
+        </div>
+    </div>
+</body>
+</html>
